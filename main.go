@@ -4,7 +4,6 @@ import (
 	"github.com/go-vgo/robotgo"
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
-	"math/rand"
 	"time"
 )
 
@@ -12,10 +11,9 @@ func main() {
 	//var inTE, outTE *walk.TextEdit
 	var w *walk.MainWindow
 	stopchan := make(chan bool)
-	width, height := robotgo.GetScreenSize()
 	MainWindow{
 		AssignTo: &w,
-		Title:    "工作中",
+		Title:    "moyu 1.1",
 		Size:     Size{300, 50},
 		Layout:   VBox{},
 		Children: []Widget{
@@ -26,15 +24,15 @@ func main() {
 				},
 			},*/
 			PushButton{
-				Text:     "开始摸鱼",
+				Text: "mess around",
 				OnClicked: func() {
-					update(w, "摸鱼中")
+					update(w, "mess around")
 					go func() {
 						for {
-							x := rand.Intn(width)
-							y := rand.Intn(height)
+							x, y := robotgo.GetMousePos()
+							robotgo.MoveMouse(x+1, y+1)
 							robotgo.MoveMouse(x, y)
-							time.Sleep(5 * time.Second)
+							time.Sleep(3 * time.Minute)
 							select {
 							case _ = <-stopchan:
 								return
@@ -45,9 +43,9 @@ func main() {
 				},
 			},
 			PushButton{
-				Text:     "开始工作",
+				Text: "work",
 				OnClicked: func() {
-					update(w, "工作中")
+					update(w, "work")
 					go func() {
 						stopchan <- true
 					}()
@@ -60,15 +58,3 @@ func main() {
 func update(w *walk.MainWindow, s string) {
 	w.SetTitle(s)
 }
-
-/*width, height := robotgo.GetScreenSize()
-
-x := rand.Intn(width)
-y := rand.Intn(height) //生成0-99之间的随机数
-// 将鼠标移动到屏幕 x:800 y:400 的位置（闪现到指定位置）
-robotgo.MoveMouse(x, y)
-
-//time.Sleep(10 * time.Second)
-// 将鼠标移动到屏幕 x:800 y:400 的位置（模仿人类操作）
-//robotgo.MoveMouseSmooth(1000, 200)
-time.Sleep(5 * time.Second)*/
